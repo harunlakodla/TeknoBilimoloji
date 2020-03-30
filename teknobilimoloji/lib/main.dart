@@ -1,46 +1,76 @@
-import 'dart:async';
-
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import './comp/Main.dart';
-import 'comp/animation/bubbles.dart';
-import 'comp/mainactivity.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:teknobilimoloji/local/theme_provider.dart';
+import 'package:teknobilimoloji/ui/MyHomePage.dart';
+import 'package:teknobilimoloji/ui/evrim_agaci/evrimagaci.dart';
+Future<void> main() async  { 
+  
+  WidgetsFlutterBinding.ensureInitialized();
+  SharedPreferences prefs = await  SharedPreferences.getInstance();
+    if(prefs.getBool("screenTheme") ==null){
+      prefs.setBool("screenTheme", true);
+    }
+   
+  runApp (
+  ChangeNotifierProvider(
+  create:(_)=> ThemeProvider(isLightTheme:  prefs.getBool("screenTheme") as bool),
+  child: MyApp(),
+  )
+);
+}
 
 
+class MyApp extends StatefulWidget {
+  
+  @override
+  _MyAppState createState() => _MyAppState();
+}
 
-void main() => runApp(MyApp());
+class _MyAppState extends State<MyApp> {
+  
+  FirebaseAnalytics analytics = FirebaseAnalytics();
+  FirebaseMessaging _firebaseMessaging =FirebaseMessaging();
 
-class MyApp extends StatelessWidget {
-
-
-  List<Widget> _list=[Bubbles(),Main()];
-
-  Widget sayfagecis(){
-      Timer.periodic(Duration(seconds:3),(timer){
-        int time=int.parse(timer.toString());
-        switch(time){
-          case 0:
-            return Bubbles();
-          break;
-          case 3:
-          return Main();
-          break;
-        }
-      });
+  @override
+  void initState() { 
+    super.initState();
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        //_showItemDialog(message);
+      },
+      //onBackgroundMessage: myBackgroundMessageHandler,
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        //_navigateToItemDetail(message);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+        //_navigateToItemDetail(message);
+      },
+    );
+    _firebaseMessaging.requestNotificationPermissions(
+      const IosNotificationSettings(sound:true,badge: true,alert: true));
   }
 
-
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final themeProvider = Provider.of<ThemeProvider>(context);
     return MaterialApp(
+      title: 'TeknoBilimoloji',
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
       debugShowCheckedModeBanner: false,
-      initialRoute: '/',
-      title: 'Flutter Demo',
+      theme: themeProvider.getThemeDAta,
       routes: {
-      // '/':(context)=>Bubbles(),
-       // '/bilimfili':(context)=>BilimFili(),
-       '/':(context)=>Main(),
-      }
+        "/evrimagaci":(context)=>EvrimAgaci()
+      },
+      home: MyHomePage(),
     );
   }
 }

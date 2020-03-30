@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "533184769903",
+    "firebase_url": "https://teknobilimoloji-0.firebaseio.com",
+    "project_id": "teknobilimoloji-0",
+    "storage_bucket": "teknobilimoloji-0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533184769903:android:9a44c4a03dd563c885029a",
+        "android_client_info": {
+          "package_name": "com.teknobilimoloji.teknobilimoloji"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "533184769903-2mjehcdssj30ko0tfucr6hg1tl5shri5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHiEvw7vP_xkzUFxiRcyIlIPEt6N2tlDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "533184769903-2mjehcdssj30ko0tfucr6hg1tl5shri5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
